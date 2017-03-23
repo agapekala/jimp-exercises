@@ -54,5 +54,51 @@ namespace datastructures {
         return str;
     }
 
-    //std::unique_ptr<SmartTree> RestoreTree(const std::string &tree);
+    std::unique_ptr<SmartTree> RestoreTree(const std::string &tree){
+        int i=0;
+        int how_many_values=0;
+        int how_many_left=0;
+        int how_many_right=0;
+        int how_many_e=0;
+        std::string value="";
+        std::unique_ptr<SmartTree> root;
+        while(true){
+            if (tree[i]=='['){
+                how_many_left+=1;
+            }
+            if (tree[i]==']'){
+                how_many_right+=1;
+            }
+            if (tree[i]='e'){
+                how_many_e+=1;
+            }
+            if(tree[i]>47 && tree[i]<58) {
+                value = value + (char) tree[i];
+            }
+            if(tree[i]==' '){
+                    if(how_many_left==1){
+                        root=CreateLeaf(std::stoi(value));
+                        how_many_values+=1;
+                    }
+                    if(how_many_right==0 && how_many_left>1){
+                        std::unique_ptr<SmartTree> left_tree_child=CreateLeaf(std::stoi(value));
+                        InsertLeftChild(root, left_tree_child);
+                        how_many_values+=1;
+
+                    }
+
+                    if(how_many_e==2){
+                        std::unique_ptr<SmartTree> right_tree_child=CreateLeaf(std::stoi(value));
+                        InsertRightChild(root, right_tree_child);
+                        how_many_values+=1;
+                    }
+                value="";
+
+                }
+            i++;
+            }
+
+
+        }
+    }
 }
