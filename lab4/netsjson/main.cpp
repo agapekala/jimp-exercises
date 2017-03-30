@@ -34,4 +34,6 @@ int main() {
     } else {
         cout << "is absent" << endl;
     }
+
+    return 0;
 }

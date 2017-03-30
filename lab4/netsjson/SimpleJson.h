@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <typeinfo>
 
 namespace nets{
     using std::experimental::optional;
