@@ -9,6 +9,7 @@
 #include <vector>
 #include <initializer_list>
 #include <set>
+#include<algorithm>
 namespace datastructures {
 
     class Word{
@@ -33,6 +34,8 @@ namespace datastructures {
         operator int()const;
         bool operator==(const Counts &count);
         Counts &operator++();
+        bool operator<(const Counts &count);
+        bool operator>(const Counts &count);
         friend std::ostream &operator<<(std::ostream &out, Counts &count);
     private:
         int count_;
@@ -43,17 +46,19 @@ namespace datastructures {
     public:
         WordCounter();
         ~WordCounter();
-        //WordCounter(std::initializer_list<std::pair<Word, Counts>> vec):vec_(vec){};
-        WordCounter(std::initializer_list<Word> vec_word):vec_word_(vec_word){};
+        WordCounter(std::initializer_list<Word> vec);
         int DistinctWords()const;
         int TotalWords()const;
         int operator[](std::string word);
         std::set<Word> Words();
         friend std::ostream &operator<<(std::ostream &out, WordCounter &count);
-
-    private:
+        static WordCounter FromInputStream(std::istream &in);
+        void New(Word word);
         std::vector<std::pair<Word, Counts>> vec_;
         std::vector<Word> vec_word_;
+    private:
+
+
     };
 
 }
