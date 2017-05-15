@@ -11,6 +11,8 @@
 #include <initializer_list>
 #include <sstream>
 #include <functional>
+#include <experimental/optional>
+#include <memory>
 
 namespace academia {
     class Serializable;
@@ -69,21 +71,6 @@ namespace academia {
         void Header(const std::string &object_name) override;
         void Footer(const std::string &object_name) override;
     };
-
-    class Building:public Serializable{
-    public:
-        Building();
-        virtual ~Building();
-        Building(int id, std::string number, std::initializer_list<std::reference_wrapper<const Serializable>> room):
-                id_(id), number_(number), room_(room){} ;
-        void Serialize(Serializer*) const override;
-
-    private:
-        int id_;
-        std::string number_;
-        std::vector<std::reference_wrapper<const Serializable>> room_;
-    };
-
     class Room:public Serializable {
     public:
         Room();
@@ -108,7 +95,33 @@ namespace academia {
         Type classroom_;
     };
 
+    class Building:public Serializable{
+    public:
+        Building();
+        virtual ~Building();
+        Building(int id, std::string number, std::initializer_list<Room> room):
+                id_(id), number_(number), room_(room){} ;
+        void Serialize(Serializer*) const override;
+        int Id() const;
+    private:
+        int id_;
+        std::string number_;
+        std::vector<Room> room_;
+    };
 
+
+
+    class BuildingRepository{
+    public:
+        BuildingRepository();
+        BuildingRepository(const std::initializer_list<Building> &building_list):building_list_(building_list){};
+        ~BuildingRepository();
+        void StoreAll(Serializer *serializer) const;
+        std::experimental::optional<Building> operator[](int id) const;
+        void Add(const Building &building);
+    private:
+        std::vector<Building> building_list_;
+    };
 }
 
 #endif //JIMP_EXERCISES_SERIALIZATION_H

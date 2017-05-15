@@ -64,7 +64,9 @@ namespace academia{
     }
 
     void JsonSerializer::SerializableField(const std::string &field_name, const academia::Serializable &value) {
-        *out_<<field_name;
+        *out_<<"\"" + field_name + "\": ";
+        value.Serialize(this);
+        *out_<<", ";
 
     }
 
@@ -75,8 +77,7 @@ namespace academia{
         int size=value.size();
         for(const Serializable &n:value){
             iter++;
-            JsonSerializer serial{out_};
-            n.Serialize(&serial);
+            n.Serialize(this);
             if(iter!=size){
                 *out_<<", ";
             }
@@ -101,8 +102,16 @@ namespace academia{
         serializer->Header("building");
         serializer->IntegerField("id", id_);
         serializer->StringField("name", number_);
-        serializer->ArrayField("rooms", room_);
+        std::vector<std::reference_wrapper<const Serializable>> tmp;
+        for(const Room &n : room_){
+            tmp.emplace_back(n);
+        }
+        serializer->ArrayField("rooms", tmp);
         serializer->Footer("building");
+    }
+
+    int Building::Id() const {
+        return id_;
     }
 
     XmlSerializer::XmlSerializer() {}
@@ -129,7 +138,9 @@ namespace academia{
     }
 
     void XmlSerializer::SerializableField(const std::string &field_name, const academia::Serializable &value) {
-        *out_<<"<"<<field_name<<">";
+        *out_ << "<" + field_name + ">";
+        value.Serialize(this);
+        *out_ <<  "<\\" + field_name + ">";
     }
 
     void XmlSerializer::ArrayField(const std::string &field_name,
@@ -139,8 +150,7 @@ namespace academia{
         int size=value.size();
         for(const Serializable &n:value){
             iter++;
-            XmlSerializer serial{out_};
-            n.Serialize(&serial);
+            n.Serialize(this);
         }
         *out_<<"<\\"<<field_name<<">";
     }
@@ -153,4 +163,31 @@ namespace academia{
         *out_<<"<\\"<<object_name<<">";
     }
 
+
+    BuildingRepository::BuildingRepository() {}
+
+    BuildingRepository::~BuildingRepository() {}
+
+    std::experimental::optional<Building> BuildingRepository::operator[](int id) const{
+        for(auto &n:building_list_){
+            if(n.Id()==id){
+                return std::experimental::make_optional(n);
+            }
+        }
+        return std::experimental::optional<Building>();
+    }
+
+    void BuildingRepository::StoreAll(Serializer *serializer) const {
+        serializer->Header("building_repository");
+        std::vector<std::reference_wrapper<const Serializable>> tmp;
+        for(const Building &n : building_list_){
+            tmp.emplace_back(n);
+        }
+        serializer->ArrayField("buildings",tmp);
+        serializer->Footer("building_repository");
+    }
+
+    void BuildingRepository::Add(const Building &building) {
+        building_list_.emplace_back(building);
+    }
 }
