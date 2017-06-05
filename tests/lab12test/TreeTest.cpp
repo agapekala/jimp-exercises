@@ -4,8 +4,9 @@
 
 #include <vector>
 #include <gtest/gtest.h>
-#include <MemLeakTest.h>
+//#include <MemLeakTest.h>
 #include "Tree.h"
+#include "../lib/memleak/MemLeakTest.h"
 
 using ::tree::Tree;
 

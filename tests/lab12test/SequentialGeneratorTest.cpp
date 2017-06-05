@@ -3,8 +3,9 @@
 //
 #include <string>
 #include <gtest/gtest.h>
-#include <MemLeakTest.h>
+//#include <MemLeakTest.h>
 #include "SequentialGenerator.h"
+#include "../lib/memleak/MemLeakTest.h"
 
 class SequentialIdGeneratorTest : public ::testing::Test, MemLeakTest {
  public:

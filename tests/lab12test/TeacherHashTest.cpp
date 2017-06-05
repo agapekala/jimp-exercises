@@ -4,8 +4,9 @@
 #include <string>
 #include <unordered_map>
 #include <gtest/gtest.h>
-#include <MemLeakTest.h>
+//#include <MemLeakTest.h>
 #include "TeacherHash.h"
+#include "../lib/memleak/MemLeakTest.h"
 
 using ::academia::Teacher;
 using ::academia::TeacherId;
@@ -120,5 +121,4 @@ TEST_F(TeacherHashTest, CanInsertTeachersAsKeysIntoUnorderedMap) {
   EXPECT_EQ(100'000'000, m[s2]);
   EXPECT_EQ(98, m[s3]);
 }
-
 

@@ -6,8 +6,9 @@
 #include <thread>
 #include <chrono>
 #include <gtest/gtest.h>
-#include <MemLeakTest.h>
+//#include <MemLeakTest.h>
 #include "TimeRecorder.h"
+#include "../lib/memleak/MemLeakTest.h"
 
 using ::profiling::TimeRecorder;
 using ::std::literals::string_literals::operator ""s;
@@ -88,7 +89,7 @@ TEST_F(TimeRecorderTest, CanCallTimeRecorderWithGlobalTestStructFunctionPointer)
   EXPECT_LT(record.second, 10);
   EXPECT_GT(record.second, 0);
 }
-
+/*
 TEST_F(TimeRecorderTest, CanCallTimeRecorderWithLambdaReturningInt) {
   std::pair<int, double> record = TimeRecorder([](){return 89;});
   EXPECT_EQ(89, record.first);
@@ -113,7 +114,7 @@ TEST_F(TimeRecorderTest, CanCallTimeRecorderWithLambdaReturningTestStruct) {
   EXPECT_LT(record.second, 10);
   EXPECT_GT(record.second, 0);
 }
-
+*/
 TEST_F(TimeRecorderTest, CanCallTimeRecorderWithStructOverloadingFunctionOperatorReturningInt) {
   std::pair<int, double> record = TimeRecorder(TestIntOperatorOverloading());
   EXPECT_EQ(23, record.first);
