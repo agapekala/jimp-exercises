@@ -42,7 +42,18 @@ namespace academia {
     public:
         TeacherHash() {};
         ~TeacherHash(){};
-        size_t operator()(const Teacher &teacher)const;
+
+        template<typename T>
+        size_t operator()(const T &t)const{
+            int id1=t.Id().Id();
+            std::string hash_string1=t.Name();
+            std::string hash_string2=t.Department();
+            std::size_t h1 = std::hash<int>{}(id1);
+            std::size_t h2=std::hash<std::string>{}(hash_string1);
+            std::size_t h3=std::hash<std::string>{}(hash_string2);
+            return h1^(h2+h3);
+        }
+        //size_t operator()(const Teacher &teacher)const;
 
     private:
         Teacher teacher_;

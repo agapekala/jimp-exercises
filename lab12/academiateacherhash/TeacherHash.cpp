@@ -69,7 +69,7 @@ namespace academia {
         return id_!=teacher.id_ or name_!=teacher.name_ or department_!=teacher.department_;
     }
 
-
+/*
     size_t TeacherHash::operator()(const Teacher &teacher) const{
         int id1=teacher.Id().Id();
         std::string hash_string1=teacher.Name();
@@ -79,7 +79,7 @@ namespace academia {
         std::size_t h3=std::hash<std::string>{}(hash_string2);
         return h1^(h2+h3);
     }
-
+*/
 }
 
 

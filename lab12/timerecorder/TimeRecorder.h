@@ -8,16 +8,14 @@
 #include <chrono>
 namespace profiling {
 
-
-    template<class T>
-    std::pair<T,double> TimeRecorder(T() ){
+    template<typename T>
+    auto TimeRecorder(T t){
         std::chrono::time_point<std::chrono::system_clock> start, end;
         start = std::chrono::system_clock::now();
-        T();
+        auto n=(t)();
         end = std::chrono::system_clock::now();
         std::chrono::duration<double> elapsed_seconds = end-start;
-        std::pair<T,double> pair_return=std::make_pair( T(),elapsed_seconds.count());
-        return pair_return;
+        return std::make_pair(n ,elapsed_seconds.count()*1000);
     };
 }
 
